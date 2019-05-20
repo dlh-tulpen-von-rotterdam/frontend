@@ -7,12 +7,13 @@ import { TextComponent } from './text/text.component';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatMenuModule, MatToolbarModule } from '@angular/material';
+import { MatButtonModule, MatFormFieldModule, MatInputModule, MatMenuModule, MatSelectModule, MatToolbarModule } from '@angular/material';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TextComponent
+    TextComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -20,12 +21,17 @@ import { MatButtonModule, MatMenuModule, MatToolbarModule } from '@angular/mater
     CommonModule,
     HttpClientModule,
     AppRoutingModule,
+    FormsModule,
 
     MatMenuModule,
     MatButtonModule,
     MatToolbarModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+}

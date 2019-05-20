@@ -1,10 +1,34 @@
-<button mat-raised-button color="primary" (click)="listen()">Höre zu</button>
-<button mat-raised-button (click)="stopListening()">Höre nicht mehr zu</button>
+<div>
+  <button mat-raised-button color="primary" *ngIf="!listening" (click)="listen()">Höre zu</button>
+  <button mat-raised-button color="primary" *ngIf="listening" (click)="stopListening()">Höre nicht mehr zu</button>
+  <button mat-raised-button (click)="reset()">Zurücksetzten</button>
+</div>
+<div>
+  <mat-form-field>
+    <mat-label>Sprache: Input</mat-label>
+    <select matNativeControl [(ngModel)]="inputLang">
+      <option value="hu">Ungarisch</option>
+      <option value="de">Deutsch</option>
+      <option value="en">Englisch</option>
+    </select>
+  </mat-form-field>
 
-<h3 class="mat-h3">Erkannter Text</h3>
-<div *ngIf="recognisedText$ | async as rt">{{ rt }}</div>
-<button mat-raised-button color="primary" (click)="sendToBackend()">Sende an Backend</button>
+  <mat-form-field>
+    <mat-label>Sprache: Output</mat-label>
+    <select matNativeControl [(ngModel)]="outputLang">
+      <option value="hu">Ungarisch</option>
+      <option value="de">Deutsch</option>
+      <option value="en">Englisch</option>
+    </select>
+  </mat-form-field>
+</div>
 
-<h3 class="mat-h3">Übersetzung</h3>
-<input [value]="translatedResult$ | async" disabled="disabled">
-<button mat-raised-button color="primary" (click)="readAnswer()">Lese die Antwort vor</button>
+<h2 class="mat-h2">Erkannter Text</h2>
+<mat-form-field>
+  <textarea matInput [value]="(recognisedText$ | async)"></textarea>
+</mat-form-field>
+
+<h2 class="mat-h2">Übersetzung</h2>
+<mat-form-field>
+  <textarea matInput [value]="(translatedResult$ | async)?.text"></textarea>
+</mat-form-field>
