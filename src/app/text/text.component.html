@@ -1,10 +1,10 @@
-<button (click)="sayHello()">Sag Hallo</button>
-<button (click)="listen()">Höre zu</button>
-<button (click)="stopListening()">Höre nicht mehr zu</button>
-<button (click)="sendToBackend()">Sende an Backend</button>
+<button mat-raised-button color="primary" (click)="listen()">Höre zu</button>
+<button mat-raised-button (click)="stopListening()">Höre nicht mehr zu</button>
 
-<h3>Erkannter Text</h3>
+<h3 class="mat-h3">Erkannter Text</h3>
 <div *ngIf="recognisedText$ | async as rt">{{ rt }}</div>
+<button mat-raised-button color="primary" (click)="sendToBackend()">Sende an Backend</button>
 
-<h3>Übersetzung</h3>
-<div *ngIf="translatedResult$ | async as tr">{{ tr.text }}</div>
+<h3 class="mat-h3">Übersetzung</h3>
+<input [value]="translatedResult$ | async" disabled="disabled">
+<button mat-raised-button color="primary" (click)="readAnswer()">Lese die Antwort vor</button>

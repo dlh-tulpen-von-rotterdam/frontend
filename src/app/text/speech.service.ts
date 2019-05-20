@@ -71,18 +71,51 @@ export class SpeechService {
     });
   }
 
-  public sayHello() {
-    // `` Ich werde dir die Erlaubnis geben, am Halt zeigenden Signal vorbei zu fahrend. Dafür muss du mit eingeschränkter Laufgeschwindigkeit von 40km/h von Kilometer 12300 bis 15200 fahren.`);
-    const speechSynth = new SpeechSynthesisUtterance(`Verstanden, Lokführer 37210, du stehst vor Blocksignal B12. Wir können das Signal momentan nicht auf Fahrt stellen wegen eines Vandalismusschadens.`);
-    speechSynth.lang = 'de-DE';
-    speechSynth.onerror = (err) => {
-      console.log('error while speechSynth: ', err);
-    };
+  public speakAnswer(text: string, lang: string) {
+    const splitted = text.match(new RegExp('.{1,200}', 'g'));
 
-    window.speechSynthesis.speak(speechSynth);
+    splitted.reduce(async (previousPromise, nextText) => {
+      await previousPromise;
+      return this.speakText(nextText, lang);
+    }, Promise.resolve());
+    //
+    // splitted.forEach(s => {
+    //   this.speakText(s, lang);
+    // });
+    //
+    // // `` Ich werde dir die Erlaubnis geben, am Halt zeigenden Signal vorbei zu fahrend. Dafür muss du mit eingeschränkter Laufgeschwindigkeit von 40km/h von Kilometer 12300 bis 15200 fahren.`);
+    // const speechSynth = new SpeechSynthesisUtterance(`Verstanden, Lokführer 37210, du stehst vor Blocksignal B12. Wir können das Signal momentan nicht auf Fahrt stellen wegen eines Vandalismusschadens.`);
+    // speechSynth.lang = 'de-DE';
+    // speechSynth.onerror = (err) => {
+    //   console.log('error while speechSynth: ', err);
+    // };
+    //
+    // window.speechSynthesis.speak(speechSynth);
   }
 
-  public sendToBackend(text: string): Observable<TranslationResult> {
-    return this._http.post<TranslationResult>('http://14ddd340.ngrok.io/translate', {inputLanguage: 'de', outputLanguage: 'en', text: text});
+  private speakText(text: string, lang: string): Promise<void> {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
+    utterance.onerror = (err) => {
+      console.log('error while speaking: ', err);
+    };
+    speechSynthesis.speak(utterance);
+
+    return new Promise(resolve => {
+      const id = setInterval(() => {
+        if (speechSynthesis.speaking === false) {
+          clearInterval(id);
+          resolve();
+        }
+      }, 100);
+    });
+  }
+
+  public sendToBackend$(text: string): Observable<TranslationResult> {
+    return this._http.post<TranslationResult>('http://14ddd340.ngrok.io/translate', {
+      inputLanguage: 'de',
+      outputLanguage: 'en',
+      text: text,
+    });
   }
 }
