@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SpeechService, TranslationResult } from './speech.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-text',
@@ -20,19 +20,30 @@ export class TextComponent {
   constructor(private _speechService: SpeechService) {
     this.recognisedText$
       .pipe(
+        distinctUntilChanged(),
+        debounceTime(200),
         filter(rt => rt && rt.length > 0),
-        tap(rt => console.debug('# voice recognition: ', rt, this.inputLang, this.outputLang)),
+        tap(rt => {
+          console.debug('# voice recognition: ', rt);
+        }),
         switchMap(rt => this._speechService.sendToBackend$(rt, this.inputLang, this.outputLang)),
-        tap(translated => console.debug('# translation from backend: ', translated)),
+        tap(translated => {
+          console.debug('# translation from backend: ', translated);
+          this.translatedResult$.next(translated);
+        }),
         tap((translated: TranslationResult) => this._speechService.speakAnswer(translated.text, this.outputLang)),
-      ).subscribe(() => {}, (err) => {
-        this.listening = false;
+      ).subscribe(() => {
+    }, (err) => {
+      this.listening = false;
+    }, () => {
+      this.listening = false;
     });
   }
 
   reset() {
     this.recognisedText$.next('');
     this.translatedResult$.next({text: ''});
+    this.stopListening();
   }
 
   listen() {
@@ -49,7 +60,7 @@ export class TextComponent {
   }
 
   private getSpeakLang(input: string): string {
-    switch(input) {
+    switch (input) {
       case 'de':
         return 'de-DE';
       case 'en':

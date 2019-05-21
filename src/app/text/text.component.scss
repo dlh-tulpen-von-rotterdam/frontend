@@ -5,4 +5,9 @@
   > div {
     margin-bottom: 20px;
   }
+
+  > section {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
 }
