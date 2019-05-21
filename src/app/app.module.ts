@@ -7,7 +7,7 @@ import { TextComponent } from './text/text.component';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatMenuModule, MatSelectModule, MatToolbarModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatMenuModule, MatSelectModule, MatTableModule, MatToolbarModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -30,6 +30,7 @@ import { FormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatSelectModule,
     MatCardModule,
+    MatTableModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

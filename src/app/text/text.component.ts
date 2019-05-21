@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { SpeechService, TranslationResult } from './speech.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { SpeechService, TextAnalysis, TranslationResult } from './speech.service';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 
 @Component({
@@ -11,9 +11,13 @@ import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs
 export class TextComponent {
   public recognisedText$ = new BehaviorSubject<string>('');
   public translatedResult$ = new BehaviorSubject<TranslationResult>({text: ''});
+  public analyzedText$ = new Observable<TextAnalysis>();
   public listening = false;
-  public inputLang = 'de';
-  public outputLang = 'en';
+  public inputLang = 'en';
+  public outputLang = 'de';
+
+  public displayedColumnsEntities: string[] = ['name', 'type'];
+  public displayedColumnsTokens: string[] = ['word', 'tag'];
 
   private subscription: Subscription;
 
@@ -31,6 +35,7 @@ export class TextComponent {
           console.debug('# translation from backend: ', translated);
           this.translatedResult$.next(translated);
         }),
+        debounceTime(800),
         tap((translated: TranslationResult) => this._speechService.speakAnswer(translated.text, this.outputLang)),
       ).subscribe(() => {
     }, (err) => {
@@ -38,6 +43,17 @@ export class TextComponent {
     }, () => {
       this.listening = false;
     });
+
+    this.analyzedText$ = this.recognisedText$
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(200),
+        filter(rt => rt && rt.length > 0),
+        tap(rt => {
+          console.debug('# voice recognition: ', rt);
+        }),
+        switchMap(rt => this._speechService.analyzeText$(rt, this.inputLang)),
+      );
   }
 
   reset() {

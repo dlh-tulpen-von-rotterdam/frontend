@@ -114,4 +114,103 @@ export class SpeechService {
       tap(res => console.debug(`Response from translation ${res.text}`)),
     );
   }
+
+  public analyzeText$(text: string, inputLang: string): Observable<TextAnalysis> {
+    return this._http.post<TextAnalysis>('https://language.googleapis.com/v1/documents:annotateText?key=AIzaSyAq6olsck9A9TZ0Z2JuugZMt-wp4t5eljs', {
+
+        'document': {
+          'content': text,
+          'language': inputLang,
+          'type': 'PLAIN_TEXT',
+        },
+        'features': {
+          'classifyText': false,
+          'extractDocumentSentiment': false,
+          'extractEntities': true,
+          'extractEntitySentiment': false,
+          'extractSyntax': true,
+        },
+      },
+    );
+  }
 }
+
+
+
+  export interface Text {
+    content: string;
+    beginOffset: number;
+  }
+
+  export interface Sentence {
+    text: Text;
+  }
+
+  export interface Text2 {
+    content: string;
+    beginOffset: number;
+  }
+
+  export interface PartOfSpeech {
+    tag: string;
+    aspect: string;
+    case: string;
+    form: string;
+    gender: string;
+    mood: string;
+    number: string;
+    person: string;
+    proper: string;
+    reciprocity: string;
+    tense: string;
+    voice: string;
+  }
+
+  export interface DependencyEdge {
+    headTokenIndex: number;
+    label: string;
+  }
+
+  export interface Token {
+    text: Text2;
+    partOfSpeech: PartOfSpeech;
+    dependencyEdge: DependencyEdge;
+    lemma: string;
+  }
+
+  export interface Metadata {
+  }
+
+  export interface Text3 {
+    content: string;
+    beginOffset: number;
+  }
+
+  export interface Mention {
+    text: Text3;
+    type: string;
+  }
+
+  export interface Entity {
+    name: string;
+    type: string;
+    metadata: Metadata;
+    salience: number;
+    mentions: Mention[];
+  }
+
+  export interface DocumentSentiment {
+    magnitude: number;
+    score: number;
+  }
+
+  export interface TextAnalysis {
+    sentences: Sentence[];
+    tokens: Token[];
+    entities: Entity[];
+    documentSentiment: DocumentSentiment;
+    language: string;
+    categories: any[];
+  }
+
+
