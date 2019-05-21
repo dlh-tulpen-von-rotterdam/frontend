@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SpeechService, TextAnalysis, TranslationResult } from './speech.service';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, switchMap, takeWhile, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-text',
@@ -35,13 +35,7 @@ export class TextComponent {
           console.debug('# translation from backend: ', translated);
           this.translatedResult$.next(translated);
         }),
-        debounceTime(800),
-        tap((translated: TranslationResult) => this._speechService.speakAnswer(translated.text, this.outputLang)),
       ).subscribe(() => {
-    }, (err) => {
-      this.listening = false;
-    }, () => {
-      this.listening = false;
     });
 
     this.analyzedText$ = this.recognisedText$
@@ -62,11 +56,21 @@ export class TextComponent {
     this.stopListening();
   }
 
+  speak() {
+    this._speechService.speakAnswer(this.translatedResult$.getValue().text, this.outputLang);
+  }
+
   listen() {
+    this.recognisedText$.next('');
+    this.translatedResult$.next({text: ''});
     this.listening = true;
     this.subscription = this._speechService.listen(this.getSpeakLang(this.inputLang))
       .subscribe(r => {
         this.recognisedText$.next(r);
+      }, () => {
+        this.listening = false;
+      }, () => {
+        this.listening = false;
       });
   }
 

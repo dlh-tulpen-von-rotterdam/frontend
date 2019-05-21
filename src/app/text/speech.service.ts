@@ -32,12 +32,14 @@ export class SpeechService {
 
       this._speechRecognition.onresult = speech => {
         let term = '';
+        let isFinal = false;
         if (speech.results) {
           // console.debug(speech.results);
           const result = speech.results[speech.resultIndex];
           const transcript = result[0].transcript;
 
           if (result.isFinal) {
+            isFinal = true;
             if (result[0].confidence < 0.3) {
               console.log('Unrecognized result - Please try again');
             } else {
@@ -51,18 +53,26 @@ export class SpeechService {
         if (term && term.length) {
           this._zone.run(() => {
             observer.next(term);
+
+            if (isFinal) {
+              observer.complete();
+            }
           });
         }
       };
 
       this._speechRecognition.onerror = error => {
         console.log('recognition error', error);
-        observer.error(error);
+        this._zone.run(() => {
+          observer.error(error);
+        });
       };
 
       this._speechRecognition.onend = () => {
         console.log('recognition ended.');
-        observer.complete();
+        this._zone.run(() => {
+          observer.complete();
+        });
       };
 
       this._speechRecognition.start();
@@ -135,82 +145,80 @@ export class SpeechService {
   }
 }
 
+export interface Text {
+  content: string;
+  beginOffset: number;
+}
 
+export interface Sentence {
+  text: Text;
+}
 
-  export interface Text {
-    content: string;
-    beginOffset: number;
-  }
+export interface Text2 {
+  content: string;
+  beginOffset: number;
+}
 
-  export interface Sentence {
-    text: Text;
-  }
+export interface PartOfSpeech {
+  tag: string;
+  aspect: string;
+  case: string;
+  form: string;
+  gender: string;
+  mood: string;
+  number: string;
+  person: string;
+  proper: string;
+  reciprocity: string;
+  tense: string;
+  voice: string;
+}
 
-  export interface Text2 {
-    content: string;
-    beginOffset: number;
-  }
+export interface DependencyEdge {
+  headTokenIndex: number;
+  label: string;
+}
 
-  export interface PartOfSpeech {
-    tag: string;
-    aspect: string;
-    case: string;
-    form: string;
-    gender: string;
-    mood: string;
-    number: string;
-    person: string;
-    proper: string;
-    reciprocity: string;
-    tense: string;
-    voice: string;
-  }
+export interface Token {
+  text: Text2;
+  partOfSpeech: PartOfSpeech;
+  dependencyEdge: DependencyEdge;
+  lemma: string;
+}
 
-  export interface DependencyEdge {
-    headTokenIndex: number;
-    label: string;
-  }
+export interface Metadata {
+}
 
-  export interface Token {
-    text: Text2;
-    partOfSpeech: PartOfSpeech;
-    dependencyEdge: DependencyEdge;
-    lemma: string;
-  }
+export interface Text3 {
+  content: string;
+  beginOffset: number;
+}
 
-  export interface Metadata {
-  }
+export interface Mention {
+  text: Text3;
+  type: string;
+}
 
-  export interface Text3 {
-    content: string;
-    beginOffset: number;
-  }
+export interface Entity {
+  name: string;
+  type: string;
+  metadata: Metadata;
+  salience: number;
+  mentions: Mention[];
+}
 
-  export interface Mention {
-    text: Text3;
-    type: string;
-  }
+export interface DocumentSentiment {
+  magnitude: number;
+  score: number;
+}
 
-  export interface Entity {
-    name: string;
-    type: string;
-    metadata: Metadata;
-    salience: number;
-    mentions: Mention[];
-  }
-
-  export interface DocumentSentiment {
-    magnitude: number;
-    score: number;
-  }
-
-  export interface TextAnalysis {
-    sentences: Sentence[];
-    tokens: Token[];
-    entities: Entity[];
-    documentSentiment: DocumentSentiment;
-    language: string;
-    categories: any[];
-  }
+export interface TextAnalysis {
+  sentences: Sentence[];
+  tokens: Token[];
+  entities: Entity[];
+  documentSentiment: DocumentSentiment;
+  language: string;
+  categories: any[];
+}
 
 

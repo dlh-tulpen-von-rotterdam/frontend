@@ -1,7 +1,8 @@
 <div>
-  <button mat-raised-button color="primary" *ngIf="!listening" (click)="listen()">Höre zu</button>
-  <button mat-raised-button color="primary" *ngIf="listening" (click)="stopListening()">Höre nicht mehr zu</button>
-  <button mat-raised-button (click)="reset()">Zurücksetzten</button>
+  <button mat-raised-button color="primary" *ngIf="!listening" (click)="listen()">Zuhören</button>
+  <button mat-raised-button color="primary" *ngIf="listening" (click)="stopListening()">Nicht mehr zuhören</button>
+  <button mat-raised-button (click)="reset()">Zurücksetzen</button>
+  <button mat-raised-button color="accent" (click)="speak()">Vorlesen</button>
 </div>
 <div>
   <mat-form-field>
@@ -23,7 +24,7 @@
   </mat-form-field>
 </div>
 
-<h1 class="mat-h1">Tuplen-Magie</h1>
+<h1 class="mat-h1">Tulpenmagie</h1>
 <section class="recognition">
   <mat-card>
     <mat-card-header>
