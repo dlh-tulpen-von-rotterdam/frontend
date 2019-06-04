@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { SpeechService, TranslationResult } from './speech.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import { SpeechService, TextAnalysis, TranslationResult } from './speech.service';
+import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, switchMap, takeWhile, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-text',
@@ -11,35 +11,66 @@ import { filter, switchMap, tap } from 'rxjs/operators';
 export class TextComponent {
   public recognisedText$ = new BehaviorSubject<string>('');
   public translatedResult$ = new BehaviorSubject<TranslationResult>({text: ''});
+  public analyzedText$ = new Observable<TextAnalysis>();
   public listening = false;
-  public inputLang = 'de';
-  public outputLang = 'en';
+  public inputLang = 'en';
+  public outputLang = 'de';
+
+  public displayedColumnsEntities: string[] = ['name', 'type'];
+  public displayedColumnsTokens: string[] = ['word', 'tag'];
 
   private subscription: Subscription;
 
   constructor(private _speechService: SpeechService) {
     this.recognisedText$
       .pipe(
+        distinctUntilChanged(),
+        debounceTime(200),
         filter(rt => rt && rt.length > 0),
-        tap(rt => console.debug('# voice recognition: ', rt, this.inputLang, this.outputLang)),
+        tap(rt => {
+          console.debug('# voice recognition: ', rt);
+        }),
         switchMap(rt => this._speechService.sendToBackend$(rt, this.inputLang, this.outputLang)),
-        tap(translated => console.debug('# translation from backend: ', translated)),
-        tap((translated: TranslationResult) => this._speechService.speakAnswer(translated.text, this.outputLang)),
-      ).subscribe((res) => {this.translatedResult$.next(res);}, (err) => {
-        this.listening = false;
+        tap(translated => {
+          console.debug('# translation from backend: ', translated);
+          this.translatedResult$.next(translated);
+        }),
+      ).subscribe(() => {
     });
+
+    this.analyzedText$ = this.recognisedText$
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(200),
+        filter(rt => rt && rt.length > 0),
+        tap(rt => {
+          console.debug('# voice recognition: ', rt);
+        }),
+        switchMap(rt => this._speechService.analyzeText$(rt, this.inputLang)),
+      );
   }
 
   reset() {
     this.recognisedText$.next('');
     this.translatedResult$.next({text: ''});
+    this.stopListening();
+  }
+
+  speak() {
+    this._speechService.speakAnswer(this.translatedResult$.getValue().text, this.outputLang);
   }
 
   listen() {
+    this.recognisedText$.next('');
+    this.translatedResult$.next({text: ''});
     this.listening = true;
     this.subscription = this._speechService.listen(this.getSpeakLang(this.inputLang))
       .subscribe(r => {
         this.recognisedText$.next(r);
+      }, () => {
+        this.listening = false;
+      }, () => {
+        this.listening = false;
       });
   }
 

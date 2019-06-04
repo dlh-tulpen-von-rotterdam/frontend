@@ -32,35 +32,47 @@ export class SpeechService {
 
       this._speechRecognition.onresult = speech => {
         let term = '';
+        let isFinal = false;
         if (speech.results) {
-          console.debug(speech.results);
+          // console.debug(speech.results);
           const result = speech.results[speech.resultIndex];
           const transcript = result[0].transcript;
 
           if (result.isFinal) {
+            isFinal = true;
             if (result[0].confidence < 0.3) {
               console.log('Unrecognized result - Please try again');
             } else {
               term = transcript.trim();
               console.log('Did you said? -> ' + term + ' , If not then say something else...');
             }
+          } else {
+            term = transcript.trim();
           }
         }
         if (term && term.length) {
           this._zone.run(() => {
             observer.next(term);
+
+            if (isFinal) {
+              observer.complete();
+            }
           });
         }
       };
 
       this._speechRecognition.onerror = error => {
         console.log('recognition error', error);
-        observer.error(error);
+        this._zone.run(() => {
+          observer.error(error);
+        });
       };
 
       this._speechRecognition.onend = () => {
-        console.log('recognition ended. Restarting...');
-        observer.complete();
+        console.log('recognition ended.');
+        this._zone.run(() => {
+          observer.complete();
+        });
       };
 
       this._speechRecognition.start();
@@ -81,19 +93,6 @@ export class SpeechService {
       await previousPromise;
       return this.speakText(nextText, lang);
     }, Promise.resolve());
-    //
-    // splitted.forEach(s => {
-    //   this.speakText(s, lang);
-    // });
-    //
-    // // `` Ich werde dir die Erlaubnis geben, am Halt zeigenden Signal vorbei zu fahrend. Dafür muss du mit eingeschränkter Laufgeschwindigkeit von 40km/h von Kilometer 12300 bis 15200 fahren.`);
-    // const speechSynth = new SpeechSynthesisUtterance(`Verstanden, Lokführer 37210, du stehst vor Blocksignal B12. Wir können das Signal momentan nicht auf Fahrt stellen wegen eines Vandalismusschadens.`);
-    // speechSynth.lang = 'de-DE';
-    // speechSynth.onerror = (err) => {
-    //   console.log('error while speechSynth: ', err);
-    // };
-    //
-    // window.speechSynthesis.speak(speechSynth);
   }
 
   private speakText(text: string, lang: string): Promise<void> {
@@ -125,4 +124,101 @@ export class SpeechService {
       tap(res => console.debug(`Response from translation ${res.text}`)),
     );
   }
+
+  public analyzeText$(text: string, inputLang: string): Observable<TextAnalysis> {
+    return this._http.post<TextAnalysis>('https://language.googleapis.com/v1/documents:annotateText?key=AIzaSyAq6olsck9A9TZ0Z2JuugZMt-wp4t5eljs', {
+
+        'document': {
+          'content': text,
+          'language': inputLang,
+          'type': 'PLAIN_TEXT',
+        },
+        'features': {
+          'classifyText': false,
+          'extractDocumentSentiment': false,
+          'extractEntities': true,
+          'extractEntitySentiment': false,
+          'extractSyntax': true,
+        },
+      },
+    );
+  }
 }
+
+export interface Text {
+  content: string;
+  beginOffset: number;
+}
+
+export interface Sentence {
+  text: Text;
+}
+
+export interface Text2 {
+  content: string;
+  beginOffset: number;
+}
+
+export interface PartOfSpeech {
+  tag: string;
+  aspect: string;
+  case: string;
+  form: string;
+  gender: string;
+  mood: string;
+  number: string;
+  person: string;
+  proper: string;
+  reciprocity: string;
+  tense: string;
+  voice: string;
+}
+
+export interface DependencyEdge {
+  headTokenIndex: number;
+  label: string;
+}
+
+export interface Token {
+  text: Text2;
+  partOfSpeech: PartOfSpeech;
+  dependencyEdge: DependencyEdge;
+  lemma: string;
+}
+
+export interface Metadata {
+}
+
+export interface Text3 {
+  content: string;
+  beginOffset: number;
+}
+
+export interface Mention {
+  text: Text3;
+  type: string;
+}
+
+export interface Entity {
+  name: string;
+  type: string;
+  metadata: Metadata;
+  salience: number;
+  mentions: Mention[];
+}
+
+export interface DocumentSentiment {
+  magnitude: number;
+  score: number;
+}
+
+export interface TextAnalysis {
+  sentences: Sentence[];
+  tokens: Token[];
+  entities: Entity[];
+  documentSentiment: DocumentSentiment;
+  language: string;
+  categories: any[];
+}
+
+
