@@ -117,7 +117,7 @@ export class SpeechService {
 
   public sendToBackend$(text: string, inputLang: string, outputLang: string): Observable<TranslationResult> {
     console.debug('Sending to backend', text);
-    return this._http.post<TranslationResult>('http://14ddd340.ngrok.io/translate', {
+    return this._http.post<TranslationResult>('http://localhost:8080/translate', {
       inputLanguage: inputLang,
       outputLanguage: outputLang,
       text: text,

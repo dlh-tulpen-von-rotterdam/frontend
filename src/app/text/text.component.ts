@@ -25,7 +25,7 @@ export class TextComponent {
         switchMap(rt => this._speechService.sendToBackend$(rt, this.inputLang, this.outputLang)),
         tap(translated => console.debug('# translation from backend: ', translated)),
         tap((translated: TranslationResult) => this._speechService.speakAnswer(translated.text, this.outputLang)),
-      ).subscribe(() => {}, (err) => {
+      ).subscribe((res) => {this.translatedResult$.next(res);}, (err) => {
         this.listening = false;
     });
   }
@@ -49,13 +49,15 @@ export class TextComponent {
   }
 
   private getSpeakLang(input: string): string {
-    switch(input) {
+    switch (input) {
       case 'de':
         return 'de-DE';
       case 'en':
         return 'en-EN';
       case 'hu':
         return 'hu-HU';
+      case 'fr':
+        return 'fr-FR';
     }
   }
 }
