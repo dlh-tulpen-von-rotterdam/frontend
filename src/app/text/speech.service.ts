@@ -8,10 +8,15 @@ interface IWindow extends Window {
   SpeechRecognition: any;
 }
 
-export interface TranslationResult {
+export interface TranslationRequest {
   inputLanguage?: string;
   outputLanguage?: string;
   text: string;
+}
+
+export interface TranslationResponse {
+  text: string;
+  originalTranslate?: string;
 }
 
 @Injectable({
@@ -116,9 +121,9 @@ export class SpeechService {
     });
   }
 
-  public sendToBackend$(text: string, inputLang: string, outputLang: string): Observable<TranslationResult> {
+  public sendToBackend$(text: string, inputLang: string, outputLang: string): Observable<TranslationRequest> {
     console.debug('Sending to backend', text);
-    return this.httpClient.post<TranslationResult>('http://localhost:8080/translate', {
+    return this.httpClient.post<TranslationRequest>('http://localhost:8080/translate', {
       inputLanguage: inputLang,
       outputLanguage: outputLang,
       text: text,

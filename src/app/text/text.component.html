@@ -34,17 +34,6 @@
 
 <h2 translate>TULPEN.MAGIC</h2>
 <div class="section">
-  <div class="box">
-    <div class="box-header"><h3 translate>RECOGNIZED.INPUT</h3>
-    </div>
-    <div class="box-content">
-      <p *ngIf="(recognisedText$ | async) as rt">{{ rt }}</p>
-    </div>
-  </div>
-  <div class="box">
-    <div class="box-header"><h3 translate>TRANSLATION</h3></div>
-    <div class="box-content">
-      <p *ngIf="(translatedResult$ | async)?.text as tr">{{ tr }}</p>
-    </div>
-  </div>
+  <app-text-box *ngIf="(recognisedText$ | async) as rt" [content]="rt" title="RECOGNIZED.INPUT"></app-text-box>
+  <app-text-box *ngIf="(translatedResult$ | async)?.text as tr" [content]="tr" title="TRANSLATION"></app-text-box>
 </div>

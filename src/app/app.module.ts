@@ -23,6 +23,7 @@ import {IconArrowRightModule, IconCollectionModule} from '@sbb-esta/angular-icon
 import {NavComponent} from './nav/nav.component';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { TextBoxComponent } from './text-box/text-box.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -32,7 +33,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     TextComponent,
-    NavComponent
+    NavComponent,
+    TextBoxComponent
   ],
   imports: [
     BrowserAnimationsModule,
