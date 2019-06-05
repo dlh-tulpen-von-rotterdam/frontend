@@ -21,8 +21,16 @@ export class TextComponent {
 
   constructor(private speechService: SpeechService,
               private translate: TranslateService) {
-    console.log(this.outputLang);
-
+    this.translate.onLangChange.subscribe(value => {
+      this.inputLang = value.lang;
+      if (this.inputLang === this.outputLang) {
+        if (this.outputLang !== 'en') {
+          this.outputLang = 'en';
+        } else {
+          this.outputLang = 'de';
+        }
+      }
+    });
     this.recognisedText$
       .pipe(
         distinctUntilChanged(),

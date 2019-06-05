@@ -1,20 +1,20 @@
 <h1 translate>TITLE</h1>
 <div class="section">
-  <button class="action-button" sbbButton *ngIf="!listening" (click)="listen()" translate>
-    <sbb-icon-two-speech-bubbles *sbbButtonIcon></sbb-icon-two-speech-bubbles>
-    LISTEN
+  <button class="action-button" sbbButton *ngIf="!listening" (click)="listen()">
+    <i *sbbButtonIcon class="fa fa-microphone fa-lg"></i>
+    {{'LISTEN' | translate}}
   </button>
-  <button class="action-button" sbbButton *ngIf="listening" (click)="stopListening()" translate>
+  <button class="action-button" sbbButton *ngIf="listening" (click)="stopListening()">
     <sbb-icon-cross *sbbButtonIcon></sbb-icon-cross>
-    STOP.LISTENING
+    {{'STOP.LISTENING' | translate}}
   </button>
-  <button class="action-button" sbbButton mode="secondary" (click)="reset()" translate>
+  <button class="action-button" sbbButton mode="secondary" (click)="reset()">
     <sbb-icon-arrows-circle *sbbButtonIcon></sbb-icon-arrows-circle>
-    RESET
+    {{'RESET' | translate}}
   </button>
-  <button class="action-button" sbbButton mode="ghost" (click)="speak()" translate>
+  <button class="action-button" sbbButton mode="ghost" (click)="speak()">
     <sbb-icon-speaker *sbbButtonIcon></sbb-icon-speaker>
-    READ.OUT
+    {{'READ.OUT' | translate}}
   </button>
 </div>
 <div class="section">
@@ -22,7 +22,8 @@
     <sbb-label>{{'OUTPUT.LANGUAGE' | translate}}</sbb-label>
     <sbb-select
       [(ngModel)]="outputLang">
-      <sbb-option *ngFor="let lan of translate.getLangs()" [value]="lan" translate>{{lan}}</sbb-option>
+      <sbb-option [disabled]="lan == inputLang" *ngFor="let lan of translate.getLangs()" [value]="lan"
+                  translate>{{lan}}</sbb-option>
     </sbb-select>
   </sbb-field>
   <sbb-loading
@@ -34,9 +35,9 @@
 <h2 translate>TULPEN.MAGIC</h2>
 <div class="section">
   <div class="box">
-    <div class="box-header"><h3 translate>RECOGNIZED.INPUT</h3></div>
+    <div class="box-header"><h3 translate>RECOGNIZED.INPUT</h3>
+    </div>
     <div class="box-content">
-      <p>hello world</p>
       <p *ngIf="(recognisedText$ | async) as rt">{{ rt }}</p>
     </div>
   </div>

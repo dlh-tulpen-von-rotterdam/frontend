@@ -12,26 +12,13 @@
        [attr.aria-expanded]="!isCollapsed"
        [ngClass]="{collapse: isCollapsed}">
     <ul class="navbar-nav mr-auto">
-      <li *ngFor="let navItem of navItems" class="nav-item">
+      <li *ngFor="let lan of translate.getLangs()" class="nav-item">
         <a class="nav-link"
-           [routerLink]="[navItem.routerLink]"
-           routerLinkActive="active"
-           routerLinkActiveOptions="{exact: true}"
-           (click)="isCollapsed = true">
-          <span>{{navItem.displayName}}</span>
+           (click)="changeLanguage(lan)"
+           [class.active]="lan == translate.currentLang">
+          <span translate>{{lan}}</span>
         </a>
       </li>
-    </ul>
-    <ul class="navbar-nav">
-      <div class="dropdown-avatar" [sbbDropdown]="dropdown" [class.dropdown-avatar-active]="dropdown.isOpen" translate>
-        <div class="avatar-icon">
-          <sbb-icon-chevron-small-down></sbb-icon-chevron-small-down>
-        </div>{{translate.currentLang}}
-      </div>
-      <sbb-dropdown #dropdown="sbbDropdown">
-        <a sbbDropdownItem *ngFor="let lan of translate.getLangs()" (click)="changeLanguage(lan)" translate>{{lan}}</a>
-
-      </sbb-dropdown>
     </ul>
     <a class="navbar-brand" href="#">
       <svg class="company-logo" viewBox="0 0 187 21" xmlns="http://www.w3.org/2000/svg" itemprop="logo">

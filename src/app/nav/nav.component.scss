@@ -2,30 +2,20 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2019.
  */
 
-$borderActive: solid 2px #666;
-$border: solid 2px white;
-$colorGrey: #666;
-.dropdown-avatar {
-  border: $border;
-  display: flex;
-  align-items: center;
-  padding: 14px;
-  color: $colorGrey;
+// TODO: Remove after ESTA and Angular Update. See: https://issues.sbb.ch/browse/IAM-864
+.navbar {
+  font-family: "SBB Web Light", Arial, Helvetica, sans-serif !important;
+  margin-top: 0px;
+}
 
-  svg > path {
-    stroke: $colorGrey;
-  }
+.navbar-nav {
+  margin-top: 0px;
+}
 
-  .avatar-icon {
-    width: 24px;
-    height: 24px;
-  }
-  &-active {
-    border-top: $borderActive;
-    border-right: $borderActive;
-    border-left: $borderActive;
-    &.sbb-dropdown-trigger-above {
-      border-bottom: $borderActive;
-    }
-  }
+.nav-item {
+  margin-top: 0px;
+}
+
+a {
+  text-decoration: none;
 }
