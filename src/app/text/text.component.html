@@ -37,3 +37,7 @@
   <app-text-box *ngIf="(recognisedText$ | async) as rt" [content]="rt" title="RECOGNIZED.INPUT"></app-text-box>
   <app-text-box *ngIf="(translatedResult$ | async)?.text as tr" [content]="tr" title="TRANSLATION"></app-text-box>
 </div>
+<div class="section">
+  <div style="width: 48%"></div>
+  <app-text-box *ngIf="(translatedResult$ | async)?.originalTranslate as tr" [content]="tr" title="ORIGINAL"></app-text-box>
+</div>
