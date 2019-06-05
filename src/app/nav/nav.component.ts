@@ -8,6 +8,7 @@
  * @since 28.04.2017, 2017.
  */
 import {Component} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 
 interface NavItem {
   displayName: string;
@@ -26,4 +27,12 @@ export class NavComponent {
   ];
 
   public isCollapsed = true;
+
+  constructor(public translate: TranslateService) {
+
+  }
+
+  private changeLanguage(lan: string): void {
+    this.translate.use(lan);
+  }
 }

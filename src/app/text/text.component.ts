@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { SpeechService, TextAnalysis, TranslationResult } from './speech.service';
-import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, switchMap, takeWhile, tap } from 'rxjs/operators';
+import {Component} from '@angular/core';
+import {SpeechService, TextAnalysis, TranslationResult} from './speech.service';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {debounceTime, distinctUntilChanged, filter, switchMap, tap} from 'rxjs/operators';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-text',
@@ -13,15 +14,15 @@ export class TextComponent {
   public translatedResult$ = new BehaviorSubject<TranslationResult>({text: ''});
   public analyzedText$ = new Observable<TextAnalysis>();
   public listening = false;
-  public inputLang = 'en';
+  public inputLang = this.translate.currentLang;
   public outputLang = 'de';
-
-  public displayedColumnsEntities: string[] = ['name', 'type'];
-  public displayedColumnsTokens: string[] = ['word', 'tag'];
 
   private subscription: Subscription;
 
-  constructor(private _speechService: SpeechService) {
+  constructor(private speechService: SpeechService,
+              private translate: TranslateService) {
+    console.log(this.outputLang);
+
     this.recognisedText$
       .pipe(
         distinctUntilChanged(),
@@ -30,7 +31,7 @@ export class TextComponent {
         tap(rt => {
           console.debug('# voice recognition: ', rt);
         }),
-        switchMap(rt => this._speechService.sendToBackend$(rt, this.inputLang, this.outputLang)),
+        switchMap(rt => this.speechService.sendToBackend$(rt, this.inputLang, this.outputLang)),
         tap(translated => {
           console.debug('# translation from backend: ', translated);
           this.translatedResult$.next(translated);
@@ -46,7 +47,7 @@ export class TextComponent {
         tap(rt => {
           console.debug('# voice recognition: ', rt);
         }),
-        switchMap(rt => this._speechService.analyzeText$(rt, this.inputLang)),
+        switchMap(rt => this.speechService.analyzeText$(rt, this.inputLang)),
       );
   }
 
@@ -57,14 +58,14 @@ export class TextComponent {
   }
 
   speak() {
-    this._speechService.speakAnswer(this.translatedResult$.getValue().text, this.outputLang);
+    this.speechService.speakAnswer(this.translatedResult$.getValue().text, this.outputLang);
   }
 
   listen() {
     this.recognisedText$.next('');
     this.translatedResult$.next({text: ''});
     this.listening = true;
-    this.subscription = this._speechService.listen(this.getSpeakLang(this.inputLang))
+    this.subscription = this.speechService.listen(this.getSpeakLang(this.inputLang))
       .subscribe(r => {
         this.recognisedText$.next(r);
       }, () => {

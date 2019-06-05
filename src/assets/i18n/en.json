@@ -1,0 +1,15 @@
+{
+  "TITLE": "Three-Country-Hack - Tulpen-App",
+  "LISTEN": "Listen",
+  "STOP.LISTENING": "Stop Listening",
+  "RESET": "Reset",
+  "READ.OUT": "Read out",
+  "OUTPUT.LANGUAGE": "Output Language",
+  "en": "English",
+  "de": "German",
+  "hu": "Hungarian",
+  "fr": "French",
+  "TULPEN.MAGIC": "Tulpen Magic",
+  "RECOGNIZED.INPUT": "Recognized Input",
+  "TRANSLATION": "Translation"
+}

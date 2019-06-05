@@ -23,26 +23,14 @@
       </li>
     </ul>
     <ul class="navbar-nav">
-<!--      <sbb-field class="lan-select" mode="long">-->
-<!--        <sbb-select-->
-<!--          placeholder="Eingabesprache"-->
-<!--          [(ngModel)]="inputLang">-->
-<!--          <sbb-option value="hu">Ungarisch</sbb-option>-->
-<!--          <sbb-option value="de">Deutsch</sbb-option>-->
-<!--          <sbb-option value="en">Englisch</sbb-option>-->
-<!--          <sbb-option value="fr">Französisch</sbb-option>-->
-<!--        </sbb-select>-->
-<!--      </sbb-field>-->
-      <div class="dropdown-avatar" [sbbDropdown]="dropdown" [class.dropdown-avatar-active]="dropdown.isOpen">
+      <div class="dropdown-avatar" [sbbDropdown]="dropdown" [class.dropdown-avatar-active]="dropdown.isOpen" translate>
         <div class="avatar-icon">
-          <sbb-icon-user></sbb-icon-user>
-        </div>Language
+          <sbb-icon-chevron-small-down></sbb-icon-chevron-small-down>
+        </div>{{translate.currentLang}}
       </div>
       <sbb-dropdown #dropdown="sbbDropdown">
-        <a sbbDropdownItem routerLinkActive="sbb-selected">German</a>
-        <a sbbDropdownItem routerLinkActive="sbb-selected">English</a>
-        <a sbbDropdownItem routerLinkActive="sbb-selected">Hungarian</a>
-        <a sbbDropdownItem routerLinkActive="sbb-selected">French</a>
+        <a sbbDropdownItem *ngFor="let lan of translate.getLangs()" (click)="changeLanguage(lan)" translate>{{lan}}</a>
+
       </sbb-dropdown>
     </ul>
     <a class="navbar-brand" href="#">
