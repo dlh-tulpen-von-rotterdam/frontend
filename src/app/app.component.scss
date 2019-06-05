@@ -1,8 +1,9 @@
-:host {
-  display: flex;
-  flex-direction: column;
-
-  > mat-toolbar {
-    margin-bottom: 20px;
-  }
+//:host {
+//  display: flex;
+//  flex-direction: column;
+//
+//}
+.app {
+  max-width: 80em;
+  margin: auto;
 }

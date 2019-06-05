@@ -1,7 +1,7 @@
-import { Injectable, NgZone } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import {Injectable, NgZone} from '@angular/core';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {tap} from 'rxjs/operators';
 
 interface IWindow extends Window {
   webkitSpeechRecognition: any;
@@ -9,6 +9,8 @@ interface IWindow extends Window {
 }
 
 export interface TranslationResult {
+  inputLanguage?: string;
+  outputLanguage?: string;
   text: string;
 }
 
@@ -16,21 +18,21 @@ export interface TranslationResult {
   providedIn: 'root',
 })
 export class SpeechService {
-  private _speechRecognition: any;
+  private speechRecognition: any;
 
-  constructor(private _zone: NgZone, private _http: HttpClient) {
+  constructor(private zone: NgZone, private httpClient: HttpClient) {
   }
 
   public listen(inputLang: string): Observable<string> {
     return Observable.create(observer => {
       const {webkitSpeechRecognition}: IWindow = window as IWindow;
-      this._speechRecognition = new webkitSpeechRecognition();
-      this._speechRecognition.continuous = true;
-      this._speechRecognition.interimResults = true;
-      this._speechRecognition.lang = inputLang;
-      this._speechRecognition.maxAlternatives = 1;
+      this.speechRecognition = new webkitSpeechRecognition();
+      this.speechRecognition.continuous = true;
+      this.speechRecognition.interimResults = true;
+      this.speechRecognition.lang = inputLang;
+      this.speechRecognition.maxAlternatives = 1;
 
-      this._speechRecognition.onresult = speech => {
+      this.speechRecognition.onresult = speech => {
         let term = '';
         let isFinal = false;
         if (speech.results) {
@@ -44,14 +46,14 @@ export class SpeechService {
               console.log('Unrecognized result - Please try again');
             } else {
               term = transcript.trim();
-              console.log('Did you said? -> ' + term + ' , If not then say something else...');
+              console.log('Did you say? -> ' + term + ' , If not then say something else...');
             }
           } else {
             term = transcript.trim();
           }
         }
         if (term && term.length) {
-          this._zone.run(() => {
+          this.zone.run(() => {
             observer.next(term);
 
             if (isFinal) {
@@ -61,26 +63,26 @@ export class SpeechService {
         }
       };
 
-      this._speechRecognition.onerror = error => {
+      this.speechRecognition.onerror = error => {
         console.log('recognition error', error);
-        this._zone.run(() => {
+        this.zone.run(() => {
           observer.error(error);
         });
       };
 
-      this._speechRecognition.onend = () => {
+      this.speechRecognition.onend = () => {
         console.log('recognition ended.');
-        this._zone.run(() => {
+        this.zone.run(() => {
           observer.complete();
         });
       };
 
-      this._speechRecognition.start();
+      this.speechRecognition.start();
       console.log('Say something - We are listening !!!');
 
       return () => {
         console.log('Stopped');
-        this._speechRecognition.stop();
+        this.speechRecognition.stop();
       };
     });
   }
@@ -116,7 +118,7 @@ export class SpeechService {
 
   public sendToBackend$(text: string, inputLang: string, outputLang: string): Observable<TranslationResult> {
     console.debug('Sending to backend', text);
-    return this._http.post<TranslationResult>('http://localhost:8080/translate', {
+    return this.httpClient.post<TranslationResult>('http://localhost:8080/translate', {
       inputLanguage: inputLang,
       outputLanguage: outputLang,
       text: text,
@@ -126,19 +128,19 @@ export class SpeechService {
   }
 
   public analyzeText$(text: string, inputLang: string): Observable<TextAnalysis> {
-    return this._http.post<TextAnalysis>('https://language.googleapis.com/v1/documents:annotateText?key=AIzaSyAq6olsck9A9TZ0Z2JuugZMt-wp4t5eljs', {
-
-        'document': {
-          'content': text,
-          'language': inputLang,
-          'type': 'PLAIN_TEXT',
+    return this.httpClient.post<TextAnalysis>(
+      'https://language.googleapis.com/v1/documents:annotateText?key=AIzaSyAq6olsck9A9TZ0Z2JuugZMt-wp4t5eljs', {
+        document: {
+          content: text,
+          language: inputLang,
+          type: 'PLAIN_TEXT',
         },
-        'features': {
-          'classifyText': false,
-          'extractDocumentSentiment': false,
-          'extractEntities': true,
-          'extractEntitySentiment': false,
-          'extractSyntax': true,
+        features: {
+          classifyText: false,
+          extractDocumentSentiment: false,
+          extractEntities: true,
+          extractEntitySentiment: false,
+          extractSyntax: true,
         },
       },
     );
