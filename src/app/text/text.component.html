@@ -2,7 +2,7 @@
 <div class="section top">
   <sbb-field mode="long">
     <sbb-select
-      [(ngModel)]="inputLang" (ngModelChange)="changeLanguage($event)">
+      [(ngModel)]="inputLang" (ngModelChange)="changeInputLanguage($event)">
       <sbb-option *ngFor="let lan of this.translate.getLangs()" [value]="lan"
                   translate>{{lan}}</sbb-option>
     </sbb-select>
@@ -26,7 +26,8 @@
   <sbb-field class="lan-select" mode="long">
     <sbb-label>{{'OUTPUT.LANGUAGE' | translate}}</sbb-label>
     <sbb-select
-      [(ngModel)]="outputLang">
+      [(ngModel)]="outputLang"
+      (ngModelChange)="changeOutputLanguage($event)">
       <sbb-option [disabled]="lan == inputLang" *ngFor="let lan of translate.getLangs()" [value]="lan"
                   translate>{{lan}}</sbb-option>
     </sbb-select>
@@ -38,16 +39,16 @@
   aria-valuetext="Loading please wait"
 ></sbb-loading>
 <div class="section">
-  <app-text-box *ngIf="(recognisedText$ | async) as rt" [content]="rt" title="RECOGNIZED.INPUT"
+  <app-text-box [content]="(recognisedText$ | async)" title="RECOGNIZED.INPUT"
                 [language]="getSpeakLang(inputLang)"></app-text-box>
 
-  <app-text-box *ngIf="(translatedResult$ | async)?.translated_text as tr" [content]="tr" title="TRANSLATION"
+  <app-text-box [content]="(translatedResult$ | async)?.translated_text" title="TRANSLATION"
                 [language]="getSpeakLang(outputLang)"></app-text-box>
 </div>
 <h2 translate>Glossary</h2>
 <div class="section">
-  <app-text-box *ngIf="(translatedResult$ | async)?.glossary_int as tr" [content]="tr" title="International"
+  <app-text-box [content]="(translatedResult$ | async)?.glossary_int" title="International"
                 [language]="getSpeakLang(outputLang)"></app-text-box>
-  <app-text-box *ngIf="(translatedResult$ | async)?.glossary_sbb as tr" [content]="tr" title="SBB"
+  <app-text-box [content]="(translatedResult$ | async)?.glossary_sbb" title="SBB"
                 [language]="getSpeakLang(outputLang)"></app-text-box>
 </div>
