@@ -16,7 +16,9 @@ export interface TranslationRequest {
 
 export interface TranslationResponse {
   text: string;
-  originalTranslate?: string;
+  translated_text?: string;
+  glossary_int?: string;
+  glossary_sbb?: string;
 }
 
 @Injectable({
@@ -34,7 +36,7 @@ export class SpeechService {
       this.speechRecognition = new webkitSpeechRecognition();
       this.speechRecognition.continuous = true;
       this.speechRecognition.interimResults = true;
-      console.log('input lang is now ' + inputLang)
+      console.log('input lang is now ' + inputLang);
       this.speechRecognition.lang = inputLang;
       this.speechRecognition.maxAlternatives = 1;
 

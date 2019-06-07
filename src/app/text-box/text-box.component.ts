@@ -1,11 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {SpeechService} from '../text/speech.service';
 
 @Component({
   selector: 'app-text-box',
   templateUrl: './text-box.component.html',
   styleUrls: ['./text-box.component.scss']
 })
-export class TextBoxComponent implements OnInit {
+export class TextBoxComponent {
 
   @Input()
   private title: string;
@@ -13,10 +14,13 @@ export class TextBoxComponent implements OnInit {
   @Input()
   private content: string;
 
-  constructor() {
+  @Input()
+  private language: string;
+
+  constructor(private speechService: SpeechService) {
   }
 
-  ngOnInit() {
+  speak() {
+    this.speechService.speakAnswer(this.content, this.language);
   }
-
 }

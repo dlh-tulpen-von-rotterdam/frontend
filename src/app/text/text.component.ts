@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {SpeechService, TextAnalysis, TranslationRequest, TranslationResponse} from './speech.service';
+import {SpeechService, TextAnalysis, TranslationResponse} from './speech.service';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, switchMap, tap} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
@@ -11,7 +11,7 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class TextComponent {
   public recognisedText$ = new BehaviorSubject<string>('');
-  public translatedResult$ = new BehaviorSubject<TranslationResponse>({text: '', originalTranslate: ''});
+  public translatedResult$ = new BehaviorSubject<TranslationResponse>({text: ''});
   public analyzedText$ = new Observable<TextAnalysis>();
   public listening = false;
   public inputLang = this.translate.currentLang;
@@ -63,10 +63,6 @@ export class TextComponent {
     this.recognisedText$.next('');
     this.translatedResult$.next({text: ''});
     this.stopListening();
-  }
-
-  speak() {
-    this.speechService.speakAnswer(this.translatedResult$.getValue().text, this.outputLang);
   }
 
   listen() {

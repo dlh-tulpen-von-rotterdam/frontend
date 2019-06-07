@@ -1,5 +1,9 @@
 <div class="box">
-  <div class="box-header"><h3 translate>{{ title }}</h3></div>
+  <div class="box-header">
+    <h3 translate>{{ title }}
+      <sbb-icon-speaker width="40" (click)="speak()"></sbb-icon-speaker>
+    </h3>
+  </div>
   <div class="box-content">
     <p>{{ content }}</p>
   </div>

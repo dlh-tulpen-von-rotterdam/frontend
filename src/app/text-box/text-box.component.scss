@@ -4,7 +4,12 @@
 
   .box-header {
     h3 {
-      margin-top: 0em;
+      margin-top: 0;
+    }
+
+    sbb-icon-speaker {
+      float: right;
+      cursor: pointer;
     }
   }
 
