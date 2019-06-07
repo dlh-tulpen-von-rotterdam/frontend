@@ -96,7 +96,7 @@ export class SpeechService {
   }
 
   public speakAnswer(text: string, lang: string): void {
-    console.debug(`Got text to say: ${text}`);
+    console.debug(`Got text to say: ${text} in ${lang}`);
     const splitted = text.match(new RegExp('.{1,200}', 'g'));
 
     splitted.reduce(async (previousPromise, nextText) => {

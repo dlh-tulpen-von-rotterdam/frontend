@@ -21,15 +21,11 @@ interface NavItem {
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent {
-  public navItems: Array<NavItem> = [
-    {displayName: 'Home', routerLink: ''},
-    {displayName: 'About', routerLink: 'about'}
-  ];
+  private inputLanguage = 'en';
 
   public isCollapsed = true;
 
   constructor(public translate: TranslateService) {
-
   }
 
   private changeLanguage(lan: string): void {

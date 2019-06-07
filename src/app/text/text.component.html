@@ -31,14 +31,14 @@
 <h2 translate>TULPEN.MAGIC</h2>
 <div class="section">
   <app-text-box *ngIf="(recognisedText$ | async) as rt" [content]="rt" title="RECOGNIZED.INPUT"
-                [language]="inputLang"></app-text-box>
+                [language]="getSpeakLang(inputLang)"></app-text-box>
   <app-text-box *ngIf="(translatedResult$ | async)?.translated_text as tr" [content]="tr" title="TRANSLATION"
-                [language]="outputLang"></app-text-box>
+                [language]="getSpeakLang(outputLang)"></app-text-box>
 </div>
 <h2 translate>Glossary</h2>
 <div class="section">
   <app-text-box *ngIf="(translatedResult$ | async)?.glossary_int as tr" [content]="tr" title="International"
-                [language]="outputLang"></app-text-box>
+                [language]="getSpeakLang(outputLang)"></app-text-box>
   <app-text-box *ngIf="(translatedResult$ | async)?.glossary_sbb as tr" [content]="tr" title="SBB"
-                [language]="outputLang"></app-text-box>
+                [language]="getSpeakLang(outputLang)"></app-text-box>
 </div>

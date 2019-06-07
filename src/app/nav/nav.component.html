@@ -12,13 +12,13 @@
        [attr.aria-expanded]="!isCollapsed"
        [ngClass]="{collapse: isCollapsed}">
     <ul class="navbar-nav mr-auto">
-      <li *ngFor="let lan of translate.getLangs()" class="nav-item">
-        <a class="nav-link"
-           (click)="changeLanguage(lan)"
-           [class.active]="lan == translate.currentLang">
-          <span translate>{{lan}}</span>
-        </a>
-      </li>
+      <sbb-field mode="long">
+        <sbb-select
+          [(ngModel)]="inputLanguage" (ngModelChange)="changeLanguage($event)">
+          <sbb-option *ngFor="let lan of this.translate.getLangs()" [value]="lan"
+                      translate>{{lan}}</sbb-option>
+        </sbb-select>
+      </sbb-field>
     </ul>
     <a class="navbar-brand" href="#">
       <svg class="company-logo" viewBox="0 0 187 21" xmlns="http://www.w3.org/2000/svg" itemprop="logo">
