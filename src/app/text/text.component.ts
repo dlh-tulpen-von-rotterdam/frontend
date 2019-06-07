@@ -91,7 +91,7 @@ export class TextComponent {
   private getSpeakLang(input: string): string {
     switch (input) {
       case 'en':
-        return 'en-EN';
+        return 'en-GB';
       case 'de-at':
         return 'de-DE';
       case 'da':

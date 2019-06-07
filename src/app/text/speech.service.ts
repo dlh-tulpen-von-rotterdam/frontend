@@ -95,32 +95,18 @@ export class SpeechService {
     });
   }
 
-  public speakAnswer(text: string, lang: string): void {
-    console.debug(`Got text to say: ${text} in ${lang}`);
-    const splitted = text.match(new RegExp('.{1,200}', 'g'));
-
-    splitted.reduce(async (previousPromise, nextText) => {
-      await previousPromise;
-      return this.speakText(nextText, lang);
-    }, Promise.resolve());
-  }
-
-  private speakText(text: string, lang: string): Promise<void> {
-    console.debug(`Saying: ${text}`);
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = lang;
-    utterance.onerror = (err) => {
-      console.log('error while speaking: ', err);
-    };
-    speechSynthesis.speak(utterance);
-
-    return new Promise(resolve => {
-      const id = setInterval(() => {
-        if (speechSynthesis.speaking === false) {
-          clearInterval(id);
-          resolve();
-        }
-      }, 100);
+  public speakAnswer(text: string, language: string): void {
+    this.httpClient.post(
+      'http://localhost:8080/speech',
+      {text, language},
+      {
+        headers: {Accept: 'audio/mp3'},
+        responseType: 'blob'
+      }
+    ).subscribe(response => {
+      const url = window.URL.createObjectURL(response);
+      const audio = new Audio(url);
+      audio.play();
     });
   }
 
