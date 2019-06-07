@@ -1,4 +1,13 @@
 <h1 translate>TITLE</h1>
+<div class="section top">
+  <sbb-field mode="long">
+    <sbb-select
+      [(ngModel)]="inputLang" (ngModelChange)="changeLanguage($event)">
+      <sbb-option *ngFor="let lan of this.translate.getLangs()" [value]="lan"
+                  translate>{{lan}}</sbb-option>
+    </sbb-select>
+  </sbb-field>
+</div>
 <div class="section">
   <button class="action-button" sbbButton *ngIf="!listening" (click)="listen()">
     <i *sbbButtonIcon class="fa fa-microphone fa-lg"></i>
@@ -22,16 +31,16 @@
                   translate>{{lan}}</sbb-option>
     </sbb-select>
   </sbb-field>
-  <sbb-loading
-    *ngIf="listening" mode="medium"
-    aria-valuetext="Loading please wait"
-  ></sbb-loading>
 </div>
-
 <h2 translate>TULPEN.MAGIC</h2>
+<sbb-loading
+  *ngIf="listening" mode="medium"
+  aria-valuetext="Loading please wait"
+></sbb-loading>
 <div class="section">
   <app-text-box *ngIf="(recognisedText$ | async) as rt" [content]="rt" title="RECOGNIZED.INPUT"
                 [language]="getSpeakLang(inputLang)"></app-text-box>
+
   <app-text-box *ngIf="(translatedResult$ | async)?.translated_text as tr" [content]="tr" title="TRANSLATION"
                 [language]="getSpeakLang(outputLang)"></app-text-box>
 </div>

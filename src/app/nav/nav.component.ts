@@ -1,19 +1,7 @@
 /**
- * Copyright (C) Schweizerische Bundesbahnen SBB, 2017.
- *
- * ESTA WebJS: Navbar Component
- *
- * @author u218609 (Kevin Kreuzer)
- * @version: 2.0.0
- * @since 28.04.2017, 2017.
+ * Copyright (C) Schweizerische Bundesbahnen SBB, 2019.
  */
 import {Component} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-
-interface NavItem {
-  displayName: string;
-  routerLink: string;
-}
 
 @Component({
   selector: 'app-navbar',
@@ -21,14 +9,8 @@ interface NavItem {
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent {
-  private inputLanguage = 'en';
 
-  public isCollapsed = true;
-
-  constructor(public translate: TranslateService) {
+  constructor() {
   }
 
-  private changeLanguage(lan: string): void {
-    this.translate.use(lan);
-  }
 }

@@ -59,6 +59,10 @@ export class TextComponent {
       );
   }
 
+  private changeLanguage(lan: string): void {
+    this.translate.use(lan);
+  }
+
   reset() {
     this.recognisedText$.next('');
     this.translatedResult$.next({text: ''});
