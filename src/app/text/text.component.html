@@ -35,9 +35,10 @@
 <h2 translate>TULPEN.MAGIC</h2>
 <div class="section">
   <app-text-box *ngIf="(recognisedText$ | async) as rt" [content]="rt" title="RECOGNIZED.INPUT"></app-text-box>
-  <app-text-box *ngIf="(translatedResult$ | async)?.text as tr" [content]="tr" title="TRANSLATION"></app-text-box>
+  <app-text-box *ngIf="(translatedResult$ | async)?.translated_text as tr" [content]="tr" title="TRANSLATION"></app-text-box>
 </div>
+<h2 translate>Glossary</h2>
 <div class="section">
-  <div style="width: 48%"></div>
-  <app-text-box *ngIf="(translatedResult$ | async)?.originalTranslate as tr" [content]="tr" title="ORIGINAL"></app-text-box>
+  <app-text-box *ngIf="(translatedResult$ | async)?.glossary_int as tr" [content]="tr" title="International"></app-text-box>
+  <app-text-box *ngIf="(translatedResult$ | async)?.glossary_sbb as tr" [content]="tr" title="SBB"></app-text-box>
 </div>

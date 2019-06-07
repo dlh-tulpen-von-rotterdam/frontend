@@ -15,7 +15,7 @@ export class TextComponent {
   public analyzedText$ = new Observable<TextAnalysis>();
   public listening = false;
   public inputLang = this.translate.currentLang;
-  public outputLang = 'de';
+  public outputLang = 'de-ch';
 
   private subscription: Subscription;
 
@@ -27,7 +27,7 @@ export class TextComponent {
         if (this.outputLang !== 'en') {
           this.outputLang = 'en';
         } else {
-          this.outputLang = 'de';
+          this.outputLang = 'de-ch';
         }
       }
     });
@@ -90,14 +90,36 @@ export class TextComponent {
 
   private getSpeakLang(input: string): string {
     switch (input) {
-      case 'de':
-        return 'de-DE';
       case 'en':
         return 'en-EN';
+      case 'de-at':
+        return 'de-DE';
+      case 'da':
+        return 'da-DK';
+      case 'fr-fr':
+        return 'fr-FR';
+      case 'sl':
+        return 'sl-SI';
+      case 'it-it':
+        return 'it-IT';
+      case 'nl-be':
+        return 'nl-NL';
+      case 'nl-nl':
+        return 'nl-NL';
+      case 'fr-be':
+        return 'fr-FR';
+      case 'sk':
+        return 'sk-SK';
+      case 'it-ch':
+        return 'it-IT';
+      case 'de-ch':
+        return 'de-DE';
+      case 'fr-ch':
+        return 'fr-FR';
+      case 'sv-se':
+        return 'sv-SE';
       case 'hu':
         return 'hu-HU';
-      case 'fr':
-        return 'fr-FR';
     }
   }
 }

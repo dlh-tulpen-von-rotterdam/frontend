@@ -34,6 +34,7 @@ export class SpeechService {
       this.speechRecognition = new webkitSpeechRecognition();
       this.speechRecognition.continuous = true;
       this.speechRecognition.interimResults = true;
+      console.log('input lang is now ' + inputLang)
       this.speechRecognition.lang = inputLang;
       this.speechRecognition.maxAlternatives = 1;
 

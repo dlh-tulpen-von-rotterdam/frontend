@@ -1,10 +1,10 @@
 {
-  "TITLE": "Three-Country-Hack - Tulpen-App",
-  "LISTEN": "Listen",
-  "STOP.LISTENING": "Stop Listening",
-  "RESET": "Reset",
-  "READ.OUT": "Read out",
-  "OUTPUT.LANGUAGE": "Output Language",
+  "TITLE": "Drei-Länder-Hack - Tulpen-App",
+  "LISTEN": "Zuhören",
+  "STOP.LISTENING": "Zuhören stoppen",
+  "RESET": "Zurücksetzen",
+  "READ.OUT": "Vorlesen",
+  "OUTPUT.LANGUAGE": "Ausgabesprache",
   "en": "English",
   "de-at": "Deutsch (Österreich)",
   "fr-fr": "Français (France)",
@@ -20,7 +20,7 @@
   "fr-ch":"français (Suisse)",
   "sv-se":"svenska",
   "hu":"magyar",
-  "TULPEN.MAGIC": "Tulpen Magic",
-  "RECOGNIZED.INPUT": "Recognized Input",
-  "TRANSLATION": "Translation"
+  "TULPEN.MAGIC": "Tulpenmagie",
+  "RECOGNIZED.INPUT": "Erkannte Eingabe",
+  "TRANSLATION": "Übersetzung"
 }
