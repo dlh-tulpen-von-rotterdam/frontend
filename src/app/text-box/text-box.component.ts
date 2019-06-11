@@ -17,6 +17,9 @@ export class TextBoxComponent {
   @Input()
   private language: string;
 
+  @Input()
+  private loading: boolean;
+
   constructor(private speechService: SpeechService) {
   }
 

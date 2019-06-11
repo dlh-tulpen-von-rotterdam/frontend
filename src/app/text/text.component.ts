@@ -13,6 +13,7 @@ export class TextComponent {
   public recognisedText$ = new BehaviorSubject<string>('');
   public translatedResult$ = new BehaviorSubject<TranslationResponse>({text: ''});
   public listening = false;
+  private isTranslating = false;
   public inputLang = this.translate.currentLang;
   public outputLang = 'de-ch';
 
@@ -20,12 +21,11 @@ export class TextComponent {
 
   constructor(private speechService: SpeechService,
               private translate: TranslateService) {
-
-    this.translateText();
   }
 
   private changeInputLanguage(lang: string): void {
     this.reset();
+    this.stopListening();
     this.inputLang = lang;
     if (this.inputLang === this.outputLang) {
       if (this.outputLang !== 'en') {
@@ -40,7 +40,9 @@ export class TextComponent {
 
   changeOutputLanguage(lang: string) {
     this.outputLang = lang;
-    this.translateText();
+    if (this.recognisedText$.getValue()) {
+      this.translateText();
+    }
   }
 
   reset() {
@@ -59,6 +61,7 @@ export class TextComponent {
         this.listening = false;
       }, () => {
         this.listening = false;
+        this.translateText();
       });
   }
 
@@ -103,6 +106,8 @@ export class TextComponent {
   }
 
   private translateText() {
+    this.translatedResult$.next({text: ''});
+    this.isTranslating = true;
     this.recognisedText$
       .pipe(
         distinctUntilChanged(),
@@ -114,6 +119,7 @@ export class TextComponent {
         switchMap(rt => this.speechService.sendToBackend$(rt, this.inputLang, this.outputLang)),
         tap(translated => {
           console.debug('# translation from backend: ', translated);
+          this.isTranslating = false;
           this.translatedResult$.next(translated);
         }),
       ).subscribe(() => {

@@ -17,6 +17,7 @@
     <sbb-icon-cross *sbbButtonIcon></sbb-icon-cross>
     {{'STOP.LISTENING' | translate}}
   </button>
+  <sbb-loading class="action-button" *ngIf="listening" mode="small" aria-valuetext="Loading please wait"></sbb-loading>
   <button class="action-button" sbbButton mode="secondary" (click)="reset()">
     <sbb-icon-arrows-circle *sbbButtonIcon></sbb-icon-arrows-circle>
     {{'RESET' | translate}}
@@ -34,16 +35,12 @@
   </sbb-field>
 </div>
 <h2 translate>TULPEN.MAGIC</h2>
-<sbb-loading
-  *ngIf="listening" mode="medium"
-  aria-valuetext="Loading please wait"
-></sbb-loading>
 <div class="section">
   <app-text-box [content]="(recognisedText$ | async)" [title]="'RECOGNIZED.INPUT' | translate"
                 [language]="getSpeakLang(inputLang)"></app-text-box>
 
   <app-text-box [content]="(translatedResult$ | async)?.translated_text" [title]="'TRANSLATION' | translate"
-                [language]="getSpeakLang(outputLang)"></app-text-box>
+                [language]="getSpeakLang(outputLang)" [loading]="isTranslating"></app-text-box>
 </div>
 <h2 translate>Glossary</h2>
 <div class="section">

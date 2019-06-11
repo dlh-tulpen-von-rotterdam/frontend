@@ -5,6 +5,7 @@
     </h3>
   </div>
   <div class="box-content">
+    <sbb-loading *ngIf="loading" mode="small" aria-valuetext="Loading please wait"></sbb-loading>
     <p>{{ content }}</p>
   </div>
 </div>
