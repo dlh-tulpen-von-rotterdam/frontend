@@ -10,12 +10,12 @@ import {TranslateService} from '@ngx-translate/core';
   styleUrls: ['./text.component.scss'],
 })
 export class TextComponent {
-  public recognisedText$ = new BehaviorSubject<string>('');
-  public translatedResult$ = new BehaviorSubject<TranslationResponse>({text: ''});
-  public listening = false;
+  private recognisedText$ = new BehaviorSubject<string>('');
+  private translatedResult$ = new BehaviorSubject<TranslationResponse>({text: ''});
+  private isListening = false;
   private isTranslating = false;
-  public inputLang = this.translate.currentLang;
-  public outputLang = 'de-ch';
+  private inputLang = this.translate.currentLang;
+  private outputLang = 'de-ch';
 
   private subscription: Subscription;
 
@@ -53,21 +53,21 @@ export class TextComponent {
   listen() {
     this.recognisedText$.next('');
     this.translatedResult$.next({text: ''});
-    this.listening = true;
+    this.isListening = true;
     this.subscription = this.speechService.listen(this.getSpeakLang(this.inputLang))
       .subscribe(r => {
         this.recognisedText$.next(r);
       }, () => {
-        this.listening = false;
+        this.isListening = false;
       }, () => {
-        this.listening = false;
+        this.isListening = false;
         this.translateText();
       });
   }
 
   stopListening() {
     this.subscription.unsubscribe();
-    this.listening = false;
+    this.isListening = false;
   }
 
   private getSpeakLang(input: string): string {

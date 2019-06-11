@@ -9,15 +9,16 @@
   </sbb-field>
 </div>
 <div class="section">
-  <button class="action-button" sbbButton *ngIf="!listening" (click)="listen()">
+  <button class="action-button" sbbButton *ngIf="!isListening" (click)="listen()">
     <i *sbbButtonIcon class="fa fa-microphone fa-lg"></i>
     {{'LISTEN' | translate}}
   </button>
-  <button class="action-button" sbbButton *ngIf="listening" (click)="stopListening()">
+  <button class="action-button" sbbButton *ngIf="isListening" (click)="stopListening()">
     <sbb-icon-cross *sbbButtonIcon></sbb-icon-cross>
     {{'STOP.LISTENING' | translate}}
   </button>
-  <sbb-loading class="action-button" *ngIf="listening" mode="small" aria-valuetext="Loading please wait"></sbb-loading>
+  <sbb-loading class="action-button" *ngIf="isListening" mode="small"
+               aria-valuetext="Loading please wait"></sbb-loading>
   <button class="action-button" sbbButton mode="secondary" (click)="reset()">
     <sbb-icon-arrows-circle *sbbButtonIcon></sbb-icon-arrows-circle>
     {{'RESET' | translate}}
@@ -45,7 +46,9 @@
 <h2 translate>Glossary</h2>
 <div class="section">
   <app-text-box [content]="(translatedResult$ | async)?.glossary_int" [title]="'INTERNATIONAL' | translate"
-                [language]="getSpeakLang(outputLang)"></app-text-box>
+                [language]="getSpeakLang(outputLang)"
+                [diff]="(translatedResult$ | async)?.translated_text"></app-text-box>
   <app-text-box [content]="(translatedResult$ | async)?.glossary_sbb" [title]="'SBB' | translate"
-                [language]="getSpeakLang(outputLang)"></app-text-box>
+                [language]="getSpeakLang(outputLang)"
+                [diff]="(translatedResult$ | async)?.translated_text"></app-text-box>
 </div>

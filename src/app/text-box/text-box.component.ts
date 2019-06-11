@@ -20,6 +20,9 @@ export class TextBoxComponent {
   @Input()
   private loading: boolean;
 
+  @Input()
+  private diff: string;
+
   constructor(private speechService: SpeechService) {
   }
 
