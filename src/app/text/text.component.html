@@ -39,16 +39,16 @@
   aria-valuetext="Loading please wait"
 ></sbb-loading>
 <div class="section">
-  <app-text-box [content]="(recognisedText$ | async)" title="RECOGNIZED.INPUT"
+  <app-text-box [content]="(recognisedText$ | async)" [title]="'RECOGNIZED.INPUT' | translate"
                 [language]="getSpeakLang(inputLang)"></app-text-box>
 
-  <app-text-box [content]="(translatedResult$ | async)?.translated_text" title="TRANSLATION"
+  <app-text-box [content]="(translatedResult$ | async)?.translated_text" [title]="'TRANSLATION' | translate"
                 [language]="getSpeakLang(outputLang)"></app-text-box>
 </div>
 <h2 translate>Glossary</h2>
 <div class="section">
-  <app-text-box [content]="(translatedResult$ | async)?.glossary_int" title="International"
+  <app-text-box [content]="(translatedResult$ | async)?.glossary_int" [title]="'INTERNATIONAL' | translate"
                 [language]="getSpeakLang(outputLang)"></app-text-box>
-  <app-text-box [content]="(translatedResult$ | async)?.glossary_sbb" title="SBB"
+  <app-text-box [content]="(translatedResult$ | async)?.glossary_sbb" [title]="'SBB' | translate"
                 [language]="getSpeakLang(outputLang)"></app-text-box>
 </div>
