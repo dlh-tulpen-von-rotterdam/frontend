@@ -30,9 +30,9 @@ export class TextBoxComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.diff) {
-      this.innerHtml = '';
+    this.innerHtml = '';
 
+    if (this.diff) {
       const Diff = new diff_match_patch();
       const diffArr = Diff.diff_main(this.diff, this.content);
       Diff.diff_cleanupSemantic(diffArr);

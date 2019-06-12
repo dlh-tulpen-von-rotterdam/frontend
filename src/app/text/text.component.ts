@@ -25,7 +25,6 @@ export class TextComponent {
 
   private changeInputLanguage(lang: string): void {
     this.reset();
-    this.stopListening();
     this.inputLang = lang;
     if (this.inputLang === this.outputLang) {
       if (this.outputLang !== 'en') {
@@ -38,19 +37,23 @@ export class TextComponent {
     this.translate.use(lang);
   }
 
-  changeOutputLanguage(lang: string) {
+  private changeOutputLanguage(lang: string): void {
     this.outputLang = lang;
     if (this.recognisedText$.getValue()) {
       this.translateText();
     }
   }
 
-  reset() {
-    this.recognisedText$.next('');
+  private clearTranslation(): void {
     this.translatedResult$.next({text: ''});
   }
 
-  listen() {
+  private reset(): void {
+    this.recognisedText$.next('');
+    this.clearTranslation();
+  }
+
+  private listen(): void {
     this.recognisedText$.next('');
     this.translatedResult$.next({text: ''});
     this.isListening = true;
@@ -65,7 +68,7 @@ export class TextComponent {
       });
   }
 
-  stopListening() {
+  private stopListening(): void {
     this.subscription.unsubscribe();
     this.isListening = false;
   }
@@ -105,7 +108,7 @@ export class TextComponent {
     }
   }
 
-  private translateText() {
+  private translateText(): void {
     this.translatedResult$.next({text: ''});
     this.isTranslating = true;
     this.recognisedText$
