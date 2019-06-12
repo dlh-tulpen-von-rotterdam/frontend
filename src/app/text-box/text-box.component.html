@@ -6,6 +6,7 @@
   </div>
   <div class="box-content">
     <sbb-loading *ngIf="loading" mode="small" aria-valuetext="Loading please wait"></sbb-loading>
-    <p>{{ content }}</p>
+    <p *ngIf="innerHtml" [innerHTML]="innerHtml"></p>
+    <p *ngIf="!innerHtml">{{content? content:''}}</p>
   </div>
 </div>
